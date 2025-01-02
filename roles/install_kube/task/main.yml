@@ -13,25 +13,25 @@
     line: '#/swapfile'
     state: absent
 
-# - name: Add Docker repository
-#   yum_repository:
-#     name: docker-ce
-#     description: Docker CE Repository
-#     baseurl: https://download.docker.com/linux/centos/7/$basearch/stable
-#     gpgcheck: yes
-#     gpgkey: https://download.docker.com/linux/centos/gpg
-#     enabled: yes
+- name: Add Docker repository
+  yum_repository:
+    name: docker-ce
+    description: Docker CE Repository
+    baseurl: https://download.docker.com/linux/centos/7/$basearch/stable
+    gpgcheck: yes
+    gpgkey: https://download.docker.com/linux/centos/gpg
+    enabled: yes
 
-# - name: Install Docker
-#   yum:
-#     name: docker-ce
-#     state: present
+- name: Install Docker
+  yum:
+    name: docker-ce
+    state: present
 
-# - name: Start and enable Docker service
-#   service:
-#     name: docker
-#     state: started
-#     enabled: yes
+- name: Start and enable Docker service
+  service:
+    name: docker
+    state: started
+    enabled: yes
 
 # - name: Add Kubernetes repository
 #   yum_repository:
