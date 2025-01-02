@@ -1,0 +1,76 @@
+- name: Disable SELinux
+  selinux:
+    state: disabled
+
+- name: Disable swap
+  shell: swapoff -a
+  ignore_errors: yes
+
+- name: Disable swap in /etc/fstab
+  lineinfile:
+    path: /etc/fstab
+    regexp: '^/swapfile'
+    line: '#/swapfile'
+    state: absent
+
+# - name: Add Docker repository
+#   yum_repository:
+#     name: docker-ce
+#     description: Docker CE Repository
+#     baseurl: https://download.docker.com/linux/centos/7/$basearch/stable
+#     gpgcheck: yes
+#     gpgkey: https://download.docker.com/linux/centos/gpg
+#     enabled: yes
+
+# - name: Install Docker
+#   yum:
+#     name: docker-ce
+#     state: present
+
+# - name: Start and enable Docker service
+#   service:
+#     name: docker
+#     state: started
+#     enabled: yes
+
+# - name: Add Kubernetes repository
+#   yum_repository:
+#     name: kubernetes
+#     description: Kubernetes Repository
+#     baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+#     gpgcheck: yes
+#     gpgkey: https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+#     enabled: yes
+
+# - name: Install Kubernetes components
+#   yum:
+#     name:
+#       - kubelet
+#       - kubeadm
+#       - kubectl
+#     state: present
+
+# - name: Enable and start kubelet service
+#   service:
+#     name: kubelet
+#     enabled: yes
+#     state: started
+
+# - name: Initialize Kubernetes cluster (Master Node Only)
+#   shell: kubeadm init --pod-network-cidr=10.244.0.0/16
+#   when: inventory_hostname == "master"
+
+# - name: Set up kubeconfig for non-root user (Master Node Only)
+#   shell: |
+#     mkdir -p $HOME/.kube
+#     sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+#     sudo chown $(id -u):$(id -g) $HOME/.kube/config
+#   when: inventory_hostname == "master"
+
+# - name: Install network plugin (Master Node Only)
+#   shell: kubectl apply -f https://docs.projectcalico.org/v3.14/manifests/calico.yaml
+#   when: inventory_hostname == "master"
+
+# - name: Join worker nodes to the cluster (Worker Nodes Only)
+#   shell: kubeadm join <master-ip>:6443 --token <token> --discovery-token-ca-cert-hash sha256:<hash>
+#   when: inventory_hostname != "master"
